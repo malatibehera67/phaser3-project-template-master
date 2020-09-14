@@ -45,6 +45,14 @@ class LandingPage extends Phaser.Scene {
         let buttonPlayGame = this.add.image(game.config.width / 2, (game.config.height / 15) * 8, 'buttonPlayGame').setOrigin(.5, .5)
         buttonPlayGame.setScale(scaleY).setScrollFactor(0)
 
+        this.msg1 = this.add.text(8 * this.game.config.width / 10, (game.config.height / 14) * 5.5, 'Get prizes inside a ketupat, open one to start! Play every day at these hours (WIB time):', {
+            font: "35px Arial", fill: "#000000", align: 'center', lineSpacing: 10,
+            wordWrap: {width: 8 * this.game.config.width / 10, useAdvancedWrap: true}
+        })
+
+        // Align.scaleToGameW(this.msg1, .8);
+        Align.centerH(this.msg1)
+
         buttonPlayGame.setInteractive().on('pointerdown', function () {
             this.scene.scene.start('PlayPage');
         });

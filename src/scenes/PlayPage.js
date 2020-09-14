@@ -56,6 +56,17 @@ class PlayPage extends Phaser.Scene {
         }, 205);
     }
 
+    addMenuButtons() {
+        this.buttonBack = this.add.image(0, 0, 'buttonBack').setOrigin(0)
+        this.buttonBack.setScale(2).setScrollFactor(0)
+        this.buttonBack.setInteractive().on('pointerdown', function () {
+            if (this.music) {
+                this.music.stop();
+            }
+            this.scene.scene.start('LandingPage');
+        });
+    }
+
     openPrizeGroup() {
 
         this.path = this.add.image(game.config.width / 2, game.config.height / 2, 'path').setOrigin(0.5, 0.5);
@@ -73,14 +84,29 @@ class PlayPage extends Phaser.Scene {
         this.prizeGroup.add(this.voucher);
         this.prizeGroup.add(this.seePrize);
 
-
-        // var graphics = this.add.graphics({x: 0, y: 0, fillStyle: {color: 0xff00ff, alpha: 0.6}, lineStyle: {color: 0x00ff00}});
-        var style = {font: "30px Arial", fill: "#000000"};
+        var style = {font: "30px Arial", fill: "#000000", lineSpacing: 10, };
         this.congText = this.add.text(0, this.game.config.height / 7, 'What a blessing!', style);
-        // {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'}
-        Align.centerH(this.congText);
         this.prizeGroup.add(this.congText);
+        this.congSubText = this.add.text(0, this.game.config.height / 5, 'Congrats, you&apos;ve won this prize:', {
+            font: "20px Arial", fill: "#000000", align: 'center', lineSpacing: 10,
+            wordWrap: {width: 300, useAdvancedWrap: true}
+        });
 
+        this.prizePrice = this.add.text(0, 0, 'Voucher Rp 500.00', {
+            font: "20px Arial", fill: "#000000", align: 'center', lineSpacing: 10,
+            wordWrap: {width: 300, useAdvancedWrap: true}
+        })
+        this.prizeGroup.add(this.prizePrice);
+        this.aGrid.placeAtIndex(434, this.prizePrice);
+
+        this.prizeSubPrice = this.add.text(0, 0, 'for minimum transaction of Rp100.000.', {
+            font: "15px Arial", fill: "grey", align: 'center', lineSpacing: 10,
+            wordWrap: {width: 350, useAdvancedWrap: true}
+        })
+        this.prizeGroup.add(this.prizeSubPrice);
+        this.aGrid.placeAtIndex(454, this.prizeSubPrice);
+
+        this.prizeGroup.add(this.congSubText);
         this.prizeGroup.children.iterate((child) => {
             child.displayHeight = 0;
             child.displayWidth = 0;
@@ -90,10 +116,6 @@ class PlayPage extends Phaser.Scene {
             child.displayHeight = 0;
             child.displayWidth = 0;
         });
-
-
-
-
         this.prizeGroup.children.iterate((child) => {
             this.tweens.add({
                 targets: child,
@@ -104,8 +126,17 @@ class PlayPage extends Phaser.Scene {
                 delay: 0,
                 paused: false,
                 repeat: 0
+                // onComplete: function ()
             });
         });
+
+        setTimeout(() => {
+            Align.centerH(this.congText);
+            Align.centerH(this.congSubText);
+            Align.centerH(this.prizePrice);
+            Align.centerH(this.prizeSubPrice);
+        }, 505);
+
     }
 
     click(sprite) {
@@ -124,11 +155,11 @@ class PlayPage extends Phaser.Scene {
                 this.graphics.fillStyle(color, alpha);
                 this.graphics.fillRect(0, 0, this.game.config.width, this.game.config.height);
                 this.graphics.setBlendMode(Phaser.BlendModes.MULTIPLY);
-
+                this.addMenuButtons();
                 this.lottie.setVisible(false);
                 this.openPrizeGroup();
+                this.music.stop();
                 this.music.pause();
-
             }, 100);
             return
         }
@@ -164,23 +195,13 @@ class PlayPage extends Phaser.Scene {
         }
 
         this.aGrid = new AlignGrid(gridConfig);
-
-        // this.aGrid.show();
-        // this.aGrid.showNumbers();
-        // 115 middle 325 middle
-
-
         let image = this.add.image(0, 0, 'bg').setOrigin(0)
         Align.setScale(image);
         Align.scaleToGameWH(image, 1);
 
-
-        // this.playMusic = this.add.audio("playMusic");
-        // this.playMusic.play();
         this.music = this.sound.add('playMusic');
         this.music.setLoop(true);
         this.music.play();
-
 
         let frame = this.add.image(0, 0, 'frame').setOrigin(0)
         Align.scaleToGameWH(frame, 1);
@@ -191,6 +212,33 @@ class PlayPage extends Phaser.Scene {
 
         this.plant = this.add.image(game.config.width, game.config.height, 'plant').setOrigin(1, 1)
         Align.scaleToGameWParallel(this.plant, .3);
+
+        this.addMenuButtons();
+
+        // this.msgBg = this.add.graphics();
+        // this.msgBg.fillStyle(0x000000, 1);
+        // this.msgBg.fillRoundedRect(52, 52, 300, 100, 52);
+        // this.aGrid.placeAtIndex(114, this.msgBg);
+        // Align.centerH(this.msgBg);
+
+        // this.msgBg = this.add.graphics();
+        // this.msgBg.fillStyle(0xffff00, 1);
+        //  32px radius on the corners
+        // this.msgBg.fillRoundedRect(0, 0, 300, 100, 52);
+        // this.msgBg.setOrigin(0.5, 0.5);
+        // this.aGrid.placeAtIndex(114, this.msgBg);
+        // Align.centerH(this.msgBg);
+
+        this.gameMsg = this.add.text(0, 0, 'Reveal your blessing inside a ketupat, go slice one to find out!', {
+            font: "35px Arial", fill: "#000000", align: 'center',
+            backgroundColor: '#7bddff',
+            padding: {top: 20, bottom: 20, left: 15, right: 15},
+            wordWrap: {width: (1.7 * this.game.config.width) / 3, useAdvancedWrap: true}
+        })
+        this.aGrid.placeAtIndex(114, this.gameMsg);
+        Align.centerH(this.gameMsg);
+
+
 
         this.arr = [220, 424, 436, 430, 325, 331, 319, 226, 214];
         this.arr = Align.shuffle(this.arr);
