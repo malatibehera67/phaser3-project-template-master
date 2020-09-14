@@ -57,6 +57,43 @@ class PlayPage extends Phaser.Scene {
     }
 
     openPrizeGroup() {
+
+        this.path = this.add.image(game.config.width / 2, game.config.height / 2, 'path').setOrigin(0.5, 0.5);
+        this.prizeGroupScaleX = Align.scaleToGameW(this.path, .92);
+        this.prizeGroupScaleY = Align.scaleToGameH(this.path, .8);
+        this.flash = this.add.image(game.config.width / 2, game.config.height / 2, 'flash').setOrigin(0.5, 0.5);
+        this.blinkBlink = this.add.image(game.config.width / 2, game.config.height / 2, 'blinkBlink').setOrigin(0.5, 0.5);
+        this.voucher = this.add.image(game.config.width / 2, game.config.height / 2, 'voucher').setOrigin(0.5, 0.5)
+        this.seePrize = this.add.image(game.config.width / 2, game.config.height / 2, 'seePrize').setOrigin(0.5, 0.5)
+        this.aGrid.placeAtIndex(514, this.seePrize);
+        this.prizeGroup = this.add.group();
+        this.prizeGroup.add(this.path);
+        this.prizeGroup.add(this.flash);
+        this.prizeGroup.add(this.blinkBlink);
+        this.prizeGroup.add(this.voucher);
+        this.prizeGroup.add(this.seePrize);
+
+
+        // var graphics = this.add.graphics({x: 0, y: 0, fillStyle: {color: 0xff00ff, alpha: 0.6}, lineStyle: {color: 0x00ff00}});
+        var style = {font: "30px Arial", fill: "#000000"};
+        this.congText = this.add.text(0, this.game.config.height / 7, 'What a blessing!', style);
+        // {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'}
+        Align.centerH(this.congText);
+        this.prizeGroup.add(this.congText);
+
+        this.prizeGroup.children.iterate((child) => {
+            child.displayHeight = 0;
+            child.displayWidth = 0;
+        });
+
+        this.prizeGroup.children.iterate((child) => {
+            child.displayHeight = 0;
+            child.displayWidth = 0;
+        });
+
+
+
+
         this.prizeGroup.children.iterate((child) => {
             this.tweens.add({
                 targets: child,
@@ -81,9 +118,17 @@ class PlayPage extends Phaser.Scene {
 
             setTimeout(() => {
                 // this.ele.setVisible(false);
+                this.graphics = this.add.graphics();
+                var color = 0x000000;
+                var alpha = .8;
+                this.graphics.fillStyle(color, alpha);
+                this.graphics.fillRect(0, 0, this.game.config.width, this.game.config.height);
+                this.graphics.setBlendMode(Phaser.BlendModes.MULTIPLY);
+
                 this.lottie.setVisible(false);
                 this.openPrizeGroup();
                 this.music.pause();
+
             }, 100);
             return
         }
@@ -204,32 +249,6 @@ class PlayPage extends Phaser.Scene {
         direction = "left";
         this.spriteArrIndex = -1;
         this.animateFirst();
-
-        this.path = this.add.image(game.config.width / 2, game.config.height / 2, 'path').setOrigin(0.5, 0.5);
-        this.prizeGroupScaleX = Align.scaleToGameW(this.path, .92);
-        this.prizeGroupScaleY = Align.scaleToGameH(this.path, .8);
-        this.flash = this.add.image(game.config.width / 2, game.config.height / 2, 'flash').setOrigin(0.5, 0.5);
-        this.blinkBlink = this.add.image(game.config.width / 2, game.config.height / 2, 'blinkBlink').setOrigin(0.5, 0.5);
-        this.voucher = this.add.image(game.config.width / 2, game.config.height / 2, 'voucher').setOrigin(0.5, 0.5)
-        this.seePrize = this.add.image(game.config.width / 2, game.config.height / 2, 'seePrize').setOrigin(0.5, 0.5)
-        // 514
-        this.aGrid.placeAtIndex(514, this.seePrize);
-        this.prizeGroup = this.add.group();
-        this.prizeGroup.add(this.path);
-        this.prizeGroup.add(this.flash);
-        this.prizeGroup.add(this.blinkBlink);
-        this.prizeGroup.add(this.voucher);
-        this.prizeGroup.add(this.seePrize);
-
-        this.prizeGroup.children.iterate((child) => {
-            child.displayHeight = 0;
-            child.displayWidth = 0;
-        });
-
-        this.prizeGroup.children.iterate((child) => {
-            child.displayHeight = 0;
-            child.displayWidth = 0;
-        });
 
     }
 }

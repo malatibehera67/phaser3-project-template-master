@@ -37,6 +37,7 @@ class Align {
     }
 
     static scaleToGameW(obj, per) {
+
         obj.displayWidth = game.config.width * per;
         return obj.scaleX;
         // obj.displayHeight = game.config.height * per;

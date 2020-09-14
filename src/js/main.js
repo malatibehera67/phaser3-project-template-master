@@ -1,4 +1,5 @@
 var game;
+var scaleRatio = window.devicePixelRatio / 3;
 window.onload = function () {
     const config = {
         type: Phaser.AUTO,
