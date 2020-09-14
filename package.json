@@ -34,5 +34,9 @@
   },
   "dependencies": {
     "phaser": "^3.20.1"
+  },
+  "engines": {
+    "node": ">= 6.0.0",
+    "npm": ">= 3.0.0"
   }
 }
